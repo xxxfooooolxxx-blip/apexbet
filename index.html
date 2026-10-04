@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApexBet - Ultimate Neon Casino & Arcade</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        apex: {
+                            dark: '#0b0f19',
+                            card: '#131c2e',
+                            border: '#1e293b',
+                            cyan: '#06b6d4',
+                            purple: '#8b5cf6',
+                            emerald: '#10b981',
+                            amber: '#f59e0b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .neon-glow-cyan { box-shadow: 0 0 30px rgba(6, 182, 212, 0.3); }
+        .neon-glow-purple { box-shadow: 0 0 30px rgba(139, 92, 246, 0.3); }
+        .neon-glow-amber { box-shadow: 0 0 30px rgba(245, 158, 11, 0.3); }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0f19; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    </style>
+</head>
+<body class="bg-apex-dark text-slate-100 min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-slate-950">
+
+    <header class="bg-apex-card/80 backdrop-blur-md border-b border-apex-border sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer group" onclick="switchTab('lobby')">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 via-teal-500 to-indigo-600 flex items-center justify-center neon-glow-cyan transform group-hover:scale-105 transition">
+                    <i class="fa-solid fa-bolt-lightning text-slate-950 text-xl font-extrabold"></i>
+                </div>
+                <div>
+                    <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-cyan-400 via-teal-300 to-indigo-400 bg-clip-text text-transparent">
+                        APEXBET
+                    </span>
+                    <div class="text-[10px] text-cyan-400 font-mono tracking-widest uppercase">Verified High-Multiplier Arcade</div>
+                </div>
+            </div>
+
+            <!-- Wallet Balance Badge & Deposit Button -->
+            <div class="flex items-center space-x-3 sm:space-x-4">
+                <div class="bg-apex-border/80 border border-slate-700/60 rounded-2xl px-4 py-2 flex items-center space-x-3 shadow-inner">
+                    <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                        <i class="fa-solid fa-wallet text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="text-[10px] uppercase font-semibold text-slate-400 tracking-wider">Balance</div>
+                        <div class="text-sm sm:text-base font-black text-amber-400 tracking-wide font-mono" id="user-balance">Rs. 10,000.00</div>
+                    </div>
+                    <button onclick="openDepositModal()" class="ml-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-slate-950 flex items-center space-x-1.5 font-bold text-xs transition transform active:scale-95 shadow-lg shadow-cyan-500/25">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span>Deposit</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col">
+        
+        <!-- Game Switcher Tabs -->
+        <div class="flex items-center space-x-2 overflow-x-auto pb-4 mb-6 scrollbar-none">
+            <button onclick="switchTab('lobby')" id="nav-lobby" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center space-x-2 bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20 transition-all whitespace-nowrap">
+                <i class="fa-solid fa-house-chimney"></i>
+                <span>Game Lobby</span>
+            </button>
+            <button onclick="switchTab('aviator')" id="nav-aviator" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center space-x-2 bg-apex-card text-slate-400 hover:text-white hover:bg-slate-800 border border-apex-border transition-all whitespace-nowrap">
+                <i class="fa-solid fa-plane-up text-cyan-400"></i>
+                <span>Aviator Crash</span>
+            </button>
+            <button onclick="switchTab('dice')" id="nav-dice" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center space-x-2 bg-apex-card text-slate-400 hover:text-white hover:bg-slate-800 border border-apex-border transition-all whitespace-nowrap">
+                <i class="fa-solid fa-dice-three text-purple-400"></i>
+                <span>Total / Dice High-Low</span>
+            </button>
+            <button onclick="switchTab('slots')" id="nav-slots" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center space-x-2 bg-apex-card text-slate-400 hover:text-white hover:bg-slate-800 border border-apex-border transition-all whitespace-nowrap">
+                <i class="fa-solid fa-slot-machine text-amber-400"></i>
+                <span>Neon Slots</span>
+            </button>
+            <button onclick="switchTab('coinflip')" id="nav-coinflip" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center space-x-2 bg-apex-card text-slate-400 hover:text-white hover:bg-slate-800 border border-apex-border transition-all whitespace-nowrap">
+                <i class="fa-solid fa-coins text-yellow-400"></i>
+                <span>Coin Flip</span>
+            </button>
+        </div>
+
+        <section id="view-lobby" class="space-y-6">
+            <!-- Hero Banner -->
+            <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-indigo-950 via-purple-950 to-apex-card border border-indigo-500/30 p-8 sm:p-12 shadow-2xl">
+                <div class="absolute -right-10 -bottom-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-bold border border-cyan-500/30">⚡ INSTANT AUTO-GATEWAY CONNECTED</span>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">Next-Gen Crypto & Arcade Thrills</h1>
+                    <p class="text-slate-300 text-sm sm:text-base">Experience lightning-fast deposits via Easypaisa & JazzCash. Play high-multiplier crash games, dice totals, and neon slots with instant payouts.</p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <button onclick="switchTab('aviator')" class="px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl shadow-lg shadow-cyan-500/25 transition transform active:scale-95 flex items-center space-x-2">
+                            <span>Play Aviator Crash</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button onclick="openDepositModal()" class="px-6 py-3 bg-apex-card hover:bg-slate-800 text-slate-200 font-bold rounded-xl border border-apex-border transition flex items-center space-x-2">
+                            <i class="fa-solid fa-wallet text-amber-400"></i>
+                            <span>Instant Deposit</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Cards Grid -->
+            <div>
+                <h2 class="text-xl font-bold mb-4 flex items-center space-x-2">
+                    <i class="fa-solid fa-gamepad text-cyan-400"></i>
+                    <span>Featured Apex Games</span>
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Aviator Card -->
+                    <div onclick="switchTab('aviator')" class="group bg-apex-card rounded-2xl border border-apex-border hover:border-cyan-500/50 p-5 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/10 flex flex-col justify-between">
+                        <div>
+                            <div class="h-36 rounded-xl bg-gradient-to-tr from-cyan-950 to-apex-dark border border-cyan-500/20 flex items-center justify-center relative overflow-hidden mb-4 group-hover:scale-[1.02] transition">
+                                <i class="fa-solid fa-plane-up text-5xl text-cyan-400 animate-bounce"></i>
+                                <div class="absolute top-2 right-2 px-2 py-0.5 bg-cyan-500/20 text-cyan-300 text-[10px] font-bold rounded">Popular</div>
+                            </div>
+                            <h3 class="font-bold text-lg text-white group-hover:text-cyan-400 transition">Aviator Crash</h3>
+                            <p class="text-xs text-slate-400 mt-1">Cash out before the plane flies away! Multiply up to 100x+.</p>
+                        </div>
+                        <div class="mt-6 flex items-center justify-between">
+                            <span class="text-xs text-emerald-400 font-semibold"><i class="fa-solid fa-circle text-[8px] mr-1"></i> Active</span>
+                            <span class="w-8 h-8 rounded-lg bg-apex-border flex items-center justify-center text-slate-300 group-hover:bg-cyan-500 group-hover:text-slate-950 transition"><i class="fa-solid fa-play text-xs"></i></span>
+                        </div>
+                    </div>
+
+                    <!-- Dice / Total Card -->
+                    <div onclick="switchTab('dice')" class="group bg-apex-card rounded-2xl border border-apex-border hover:border-purple-500/50 p-5 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/10 flex flex-col justify-between">
+                        <div>
+                            <div class="h-36 rounded-xl bg-gradient-to-tr from-purple-950 to-apex-dark border border-purple-500/20 flex items-center justify-center relative overflow-hidden mb-4 group-hover:scale-[1.02] transition">
+                                <i class="fa-solid fa-dice-three text-5xl text-purple-400"></i>
+                                <div class="absolute top-2 right-2 px-2 py-0.5 bg-purple-500/20 text-purple-300 text-[10px] font-bold rounded">High RTP</div>
+                            </div>
+                            <h3 class="font-bold text-lg text-white group-hover:text-purple-400 transition">Total / Dice High-Low</h3>
+                            <p class="text-xs text-slate-400 mt-1">Predict whether the dice total rolls Over or Under your target.</p>
+                        </div>
+                        <div class="mt-6 flex items-center justify-between">
+                            <span class="text-xs text-emerald-400 font-semibold"><i class="fa-solid fa-circle text-[8px] mr-1"></i> Active</span>
+                            <span class="w-8 h-8 rounded-lg bg-apex-border flex items-center justify-center text-slate-300 group-hover:bg-purple-500 group-hover:text-slate-950 transition"><i class="fa-solid fa-play text-xs"></i></span>
+                        </div>
+                    </div>
+
+                    <!-- Slots Card -->
+                    <div onclick="switchTab('slots')" class="group bg-apex-card rounded-2xl border border-apex-border hover:border-amber-500/50 p-5 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/10 flex flex-col justify-between">
+                        <div>
+                            <div class="h-36 rounded-xl bg-gradient-to-tr from-amber-950 to-apex-dark border border-amber-500/20 flex items-center justify-center relative overflow-hidden mb-4 group-hover:scale-[1.02] transition">
+                                <i class="fa-solid fa-slot-machine text-5xl text-amber-400"></i>
+                                <div class="absolute top-2 right-2 px-2 py-0.5 bg-amber-500/20 text-amber-300 text-[10px] font-bold rounded">Jackpot</div>
+                            </div>
+                            <h3 class="font-bold text-lg text-white group-hover:text-amber-400 transition">Neon Slots</h3>
+                            <p class="text-xs text-slate-400 mt-1">Spin the reels and hit triple matching symbols for massive wins.</p>
+                        </div>
+                        <div class="mt-6 flex items-center justify-between">
+                            <span class="text-xs text-emerald-400 font-semibold"><i class="fa-solid fa-circle text-[8px] mr-1"></i> Active</span>
+                            <span class="w-8 h-8 rounded-lg bg-apex-border flex items-center justify-center text-slate-300 group-hover:bg-amber-500 group-hover:text-slate-950 transition"><i class="fa-solid fa-play text-xs"></i></span>
+                        </div>
+                    </div>
+
+                    <!-- Coin Flip Card -->
+                    <div onclick="switchTab('coinflip')" class="group bg-apex-card rounded-2xl border border-apex-border hover:border-yellow-500/50 p-5 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-yellow-500/10 flex flex-col justify-between">
+                        <div>
+                            <div class="h-36 rounded-xl bg-gradient-to-tr from-yellow-950 to-apex-dark border border-yellow-500/20 flex items-center justify-center relative overflow-hidden mb-4 group-hover:scale-[1.02] transition">
+                                <i class="fa-solid fa-coins text-5xl text-yellow-400"></i>
+                                <div class="absolute top-2 right-2 px-2 py-0.5 bg-yellow-500/20 text-yellow-300 text-[10px] font-bold rounded">Instant</div>
+                            </div>
+                            <h3 class="font-bold text-lg text-white group-hover:text-yellow-400 transition">Coin Flip</h3>
+                            <p class="text-xs text-slate-400 mt-1">Heads or Tails? Double your money instantly in a 50/50 showdown.</p>
+                        </div>
+                        <div class="mt-6 flex items-center justify-between">
+                            <span class="text-xs text-emerald-400 font-semibold"><i class="fa-solid fa-circle text-[8px] mr-1"></i> Active</span>
+                            <span class="w-8 h-8 rounded-lg bg-apex-border flex items-center justify-center text-slate-300 group-hover:bg-yellow-500 group-hover:text-slate-950 transition"><i class="fa-solid fa-play text-xs"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-aviator" class="hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-white flex items-center space-x-2">
+                        <i class="fa-solid fa-plane-up text-cyan-400"></i>
+                        <span>Aviator Crash Game</span>
+                    </h2>
+                    <p class="text-xs text-slate-400">Cash out before the crash. Multiplier goes up infinitely!</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Flight Stage (2 cols) -->
+                <div class="lg:col-span-2 bg-apex-card rounded-2xl border border-apex-border p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden min-h-[420px]">
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.05)_0,transparent_70%)] pointer-events-none"></div>
+
+                    <div class="flex justify-between items-center z-10">
+                        <div class="px-3 py-1 rounded-lg bg-apex-border/80 border border-slate-700/50 text-xs font-mono text-cyan-300">
+                            RTP: 97.0%
+                        </div>
+                        <div id="aviator-status-badge" class="px-3 py-1 rounded-lg bg-amber-500/20 border border-amber-500/30 text-xs font-bold text-amber-400">
+                            Waiting for next flight...
+                        </div>
+                    </div>
+
+                    <!-- Multiplier Display -->
+                    <div class="flex flex-col items-center justify-center my-auto z-10 py-10">
+                        <div id="aviator-multiplier-display" class="text-6xl sm:text-8xl font-black font-mono tracking-wider text-white drop-shadow-[0_0_25px_rgba(6,182,212,0.4)]">
+                            1.00x
+                        </div>
+                        <div id="aviator-subtext" class="text-sm text-slate-400 mt-2 font-medium">Place your bet to join</div>
+                    </div>
+
+                    <!-- Flight Visual Curve -->
+                    <div class="relative h-16 w-full overflow-hidden z-10 flex items-end">
+                        <div id="aviator-plane-icon" class="absolute left-0 bottom-0 text-3xl text-cyan-400 transition-all duration-75 transform -translate-x-10 opacity-0">
+                            <i class="fa-solid fa-plane-up"></i>
+                        </div>
+                        <div class="w-full h-[1px] bg-apex-border"></div>
+                    </div>
+                </div>
+
+                <!-- Aviator Betting Controls -->
+                <div class="bg-apex-card rounded-2xl border border-apex-border p-5 flex flex-col justify-between space-y-4">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Bet Amount (Rs.)</span>
+                            <div class="flex space-x-1">
+                                <button onclick="setAviatorBet(100)" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-cyan-400">100</button>
+                                <button onclick="setAviatorBet(500)" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-cyan-400">500</button>
+                                <button onclick="setAviatorBet(1000)" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-cyan-400">1000</button>
+                                <button onclick="setAviatorBetMax()" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-amber-400">MAX</button>
+                            </div>
+                        </div>
+                        
+                        <div class="relative">
+                            <input type="number" id="aviator-bet-input" value="100" min="10" class="w-full bg-apex-dark border border-apex-border rounded-xl px-4 py-3 text-white font-bold focus:outline-none focus:border-cyan-500 font-mono">
+                            <div class="absolute right-3 top-3.5 text-slate-400 text-sm font-bold">PKR</div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs text-slate-400">
+                                <span>Auto Cash Out</span>
+                                <span id="auto-cashout-val" class="font-bold text-white">2.00x</span>
+                            </div>
+                            <input type="range" id="aviator-auto-cashout" min="1.1" max="10" step="0.1" value="2.0" class="w-full accent-cyan-500 bg-apex-dark cursor-pointer" oninput="updateAutoCashoutLabel(this.value)">
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-4">
+                        <button id="aviator-action-btn" onclick="handleAviatorAction()" class="w-full py-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold text-base shadow-lg shadow-cyan-500/25 transition transform active:scale-95 flex items-center justify-center space-x-2">
+                            <span>PLACE BET</span>
+                        </button>
+                        <div id="aviator-message" class="text-center text-xs text-slate-400 h-5"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-dice" class="hidden space-y-6">
+            <div>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-dice-three text-purple-400"></i>
+                    <span>Total / Dice High-Low Game</span>
+                </h2>
+                <p class="text-xs text-slate-400">Roll 3 dice. Predict if the total sum will be Over or Under your chosen target.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Dice Board (2 cols) -->
+                <div class="lg:col-span-2 bg-apex-card rounded-2xl border border-apex-border p-6 flex flex-col justify-between items-center text-center relative overflow-hidden min-h-[420px]">
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.05)_0,transparent_70%)] pointer-events-none"></div>
+
+                    <div class="w-full flex justify-between items-center z-10">
+                        <div class="px-3 py-1 rounded-lg bg-apex-border/80 border border-slate-700/50 text-xs font-mono text-purple-300">
+                            Win Chance: <span id="dice-win-chance">50%</span>
+                        </div>
+                        <div class="px-3 py-1 rounded-lg bg-apex-border/80 border border-slate-700/50 text-xs font-mono text-amber-300">
+                            Payout: <span id="dice-payout-mult">1.98x</span>
+                        </div>
+                    </div>
+
+                    <!-- Dice Box -->
+                    <div class="my-auto py-8 z-10 space-y-6 w-full">
+                        <div class="flex justify-center items-center space-x-4">
+                            <div id="dice-1" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-apex-dark border-2 border-purple-500/50 flex items-center justify-center text-3xl sm:text-4xl text-purple-300 shadow-lg shadow-purple-500/10 font-bold">
+                                <i class="fa-solid fa-dice-one"></i>
+                            </div>
+                            <div id="dice-2" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-apex-dark border-2 border-purple-500/50 flex items-center justify-center text-3xl sm:text-4xl text-purple-300 shadow-lg shadow-purple-500/10 font-bold">
+                                <i class="fa-solid fa-dice-two"></i>
+                            </div>
+                            <div id="dice-3" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-apex-dark border-2 border-purple-500/50 flex items-center justify-center text-3xl sm:text-4xl text-purple-300 shadow-lg shadow-purple-500/10 font-bold">
+                                <i class="fa-solid fa-dice-three"></i>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <div class="text-xs uppercase tracking-widest text-slate-400 font-semibold">Total Rolled</div>
+                            <div id="dice-total-result" class="text-5xl font-black text-white font-mono">--</div>
+                        </div>
+                    </div>
+
+                    <!-- Slider -->
+                    <div class="w-full max-w-md z-10 space-y-2">
+                        <div class="flex justify-between text-xs text-slate-300">
+                            <span>Target Total: <strong id="dice-target-val" class="text-purple-400 text-sm">10.5</strong></span>
+                            <span id="dice-prediction-label" class="font-bold text-cyan-400">OVER</span>
+                        </div>
+                        <input type="range" id="dice-target-slider" min="4" max="17" step="0.5" value="10.5" class="w-full accent-purple-500 bg-apex-dark cursor-pointer" oninput="updateDiceSlider(this.value)">
+                    </div>
+                </div>
+
+                <!-- Dice Controls -->
+                <div class="bg-apex-card rounded-2xl border border-apex-border p-5 flex flex-col justify-between space-y-4">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Bet Amount (Rs.)</span>
+                            <div class="flex space-x-1">
+                                <button onclick="setDiceBet(100)" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-purple-400">100</button>
+                                <button onclick="setDiceBet(500)" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-purple-400">500</button>
+                                <button onclick="setDiceBet(1000)" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-purple-400">1000</button>
+                                <button onclick="setDiceBetMax()" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-amber-400">MAX</button>
+                            </div>
+                        </div>
+
+                        <div class="relative">
+                            <input type="number" id="dice-bet-input" value="100" min="10" class="w-full bg-apex-dark border border-apex-border rounded-xl px-4 py-3 text-white font-bold focus:outline-none focus:border-purple-500 font-mono">
+                            <div class="absolute right-3 top-3.5 text-slate-400 text-sm font-bold">PKR</div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 pt-2">
+                            <button id="btn-pred-over" onclick="setDicePrediction('over')" class="py-3 rounded-xl bg-purple-600 text-white font-bold text-sm shadow-lg shadow-purple-600/20 transition border border-purple-500">
+                                OVER
+                            </button>
+                            <button id="btn-pred-under" onclick="setDicePrediction('under')" class="py-3 rounded-xl bg-apex-dark text-slate-400 font-bold text-sm hover:bg-slate-800 transition border border-apex-border">
+                                UNDER
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-4">
+                        <button onclick="rollDiceGame()" class="w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-base shadow-lg shadow-purple-600/30 transition transform active:scale-95 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-dice"></i>
+                            <span>ROLL DICE</span>
+                        </button>
+                        <div id="dice-message" class="text-center text-xs text-slate-400 h-5"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-slots" class="hidden space-y-6">
+            <div>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-slot-machine text-amber-400"></i>
+                    <span>Neon Slots Jackpot</span>
+                </h2>
+                <p class="text-xs text-slate-400">Match 3 neon symbols across reels to win up to 50x your bet.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Slot Reels (2 cols) -->
+                <div class="lg:col-span-2 bg-apex-card rounded-2xl border border-apex-border p-6 flex flex-col justify-between items-center text-center relative overflow-hidden min-h-[420px]">
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.05)_0,transparent_70%)] pointer-events-none"></div>
+
+                    <div class="w-full flex justify-between items-center z-10">
+                        <div class="px-3 py-1 rounded-lg bg-apex-border/80 border border-slate-700/50 text-xs font-mono text-amber-300">
+                            Jackpot Pool: Rs. 450,420
+                        </div>
+                        <div class="px-3 py-1 rounded-lg bg-apex-border/80 border border-slate-700/50 text-xs font-mono text-emerald-300">
+                            RTP: 96.5%
+                        </div>
+                    </div>
+
+                    <!-- 3 Reels -->
+                    <div class="my-auto py-6 z-10 flex items-center justify-center space-x-4 sm:space-x-6">
+                        <div class="w-24 h-32 sm:w-32 sm:h-40 rounded-2xl bg-apex-dark border-4 border-amber-500/40 flex items-center justify-center text-5xl sm:text-6xl shadow-inner overflow-hidden relative">
+                            <div id="reel-1" class="transition-all duration-300">💎</div>
+                        </div>
+                        <div class="w-24 h-32 sm:w-32 sm:h-40 rounded-2xl bg-apex-dark border-4 border-amber-500/40 flex items-center justify-center text-5xl sm:text-6xl shadow-inner overflow-hidden relative">
+                            <div id="reel-2" class="transition-all duration-300">🔥</div>
+                        </div>
+                        <div class="w-24 h-32 sm:w-32 sm:h-40 rounded-2xl bg-apex-dark border-4 border-amber-500/40 flex items-center justify-center text-5xl sm:text-6xl shadow-inner overflow-hidden relative">
+                            <div id="reel-3" class="transition-all duration-300">⭐</div>
+                        </div>
+                    </div>
+
+                    <div id="slot-result-message" class="text-sm font-bold text-amber-400 z-10 h-6">
+                        Match 3 symbols to win big!
+                    </div>
+                </div>
+
+                <!-- Slot Controls -->
+                <div class="bg-apex-card rounded-2xl border border-apex-border p-5 flex flex-col justify-between space-y-4">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Bet Amount (Rs.)</span>
+                            <div class="flex space-x-1">
+                                <button onclick="setSlotBet(100)" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-amber-400">100</button>
+                                <button onclick="setSlotBet(500)" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-amber-400">500</button>
+                                <button onclick="setSlotBet(1000)" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-amber-400">1000</button>
+                                <button onclick="setSlotBetMax()" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-cyan-400">MAX</button>
+                            </div>
+                        </div>
+
+                        <div class="relative">
+                            <input type="number" id="slot-bet-input" value="100" min="10" class="w-full bg-apex-dark border border-apex-border rounded-xl px-4 py-3 text-white font-bold focus:outline-none focus:border-amber-500 font-mono">
+                            <div class="absolute right-3 top-3.5 text-slate-400 text-sm font-bold">PKR</div>
+                        </div>
+
+                        <!-- Paytable -->
+                        <div class="bg-apex-dark/60 rounded-xl p-3 border border-apex-border text-xs space-y-1.5">
+                            <div class="font-bold text-slate-300 mb-1">Paytable Multipliers:</div>
+                            <div class="flex justify-between text-slate-400"><span>💎 💎 💎</span><span class="text-amber-400 font-bold">50x</span></div>
+                            <div class="flex justify-between text-slate-400"><span>7️⃣ 7️⃣ 7️⃣</span><span class="text-amber-400 font-bold">25x</span></div>
+                            <div class="flex justify-between text-slate-400"><span>⭐ ⭐ ⭐</span><span class="text-amber-400 font-bold">15x</span></div>
+                            <div class="flex justify-between text-slate-400"><span>Any 2 matching</span><span class="text-amber-400 font-bold">2x</span></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-2">
+                        <button id="spin-btn" onclick="spinSlots()" class="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-extrabold text-base shadow-lg shadow-amber-500/30 transition transform active:scale-95 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-rotate"></i>
+                            <span>SPIN REELS</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-coinflip" class="hidden space-y-6">
+            <div>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-coins text-yellow-400"></i>
+                    <span>Coin Flip Showdown</span>
+                </h2>
+                <p class="text-xs text-slate-400">Pick Heads or Tails. Double your stake instantly!</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Coin Stage (2 cols) -->
+                <div class="lg:col-span-2 bg-apex-card rounded-2xl border border-apex-border p-6 flex flex-col justify-between items-center text-center relative overflow-hidden min-h-[420px]">
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(234,179,8,0.05)_0,transparent_70%)] pointer-events-none"></div>
+
+                    <div class="w-full flex justify-between items-center z-10">
+                        <div class="px-3 py-1 rounded-lg bg-apex-border/80 border border-slate-700/50 text-xs font-mono text-yellow-300">
+                            Multiplier: 1.98x
+                        </div>
+                        <div class="px-3 py-1 rounded-lg bg-apex-border/80 border border-slate-700/50 text-xs font-mono text-emerald-300">
+                            Win Probability: 50%
+                        </div>
+                    </div>
+
+                    <div class="my-auto py-10 z-10 flex flex-col items-center justify-center">
+                        <div id="coin-element" class="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-tr from-yellow-600 via-amber-400 to-yellow-300 border-4 border-yellow-200 shadow-2xl shadow-yellow-500/20 flex items-center justify-center text-4xl sm:text-5xl font-black text-slate-950 transition-transform duration-700">
+                            👑
+                        </div>
+                        <div id="coin-result-text" class="text-lg font-bold text-white mt-6">Choose your side and flip!</div>
+                    </div>
+
+                    <div class="z-10 text-xs text-slate-400">Provably Fair SHA-256 Verified</div>
+                </div>
+
+                <!-- Coin Controls -->
+                <div class="bg-apex-card rounded-2xl border border-apex-border p-5 flex flex-col justify-between space-y-4">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Bet Amount (Rs.)</span>
+                            <div class="flex space-x-1">
+                                <button onclick="setCoinBet(100)" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-yellow-400">100</button>
+                                <button onclick="setCoinBet(500)" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-yellow-400">500</button>
+                                <button onclick="setCoinBet(1000)" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-yellow-400">1000</button>
+                                <button onclick="setCoinBetMax()" class="px-2 py-1 rounded bg-apex-border hover:bg-slate-700 text-xs font-bold text-cyan-400">MAX</button>
+                            </div>
+                        </div>
+
+                        <div class="relative">
+                            <input type="number" id="coin-bet-input" value="100" min="10" class="w-full bg-apex-dark border border-apex-border rounded-xl px-4 py-3 text-white font-bold focus:outline-none focus:border-yellow-500 font-mono">
+                            <div class="absolute right-3 top-3.5 text-slate-400 text-sm font-bold">PKR</div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="text-xs text-slate-400 font-semibold">Select Side</div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button id="btn-side-heads" onclick="setCoinSide('heads')" class="py-3 rounded-xl bg-yellow-500 text-slate-950 font-extrabold text-sm shadow-lg shadow-yellow-500/20 transition flex items-center justify-center space-x-2">
+                                    <span>👑 Heads</span>
+                                </button>
+                                <button id="btn-side-tails" onclick="setCoinSide('tails')" class="py-3 rounded-xl bg-apex-dark text-slate-400 font-extrabold text-sm hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+                                    <span>🪙 Tails</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-2">
+                        <button onclick="flipCoin()" class="w-full py-4 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-slate-950 font-extrabold text-base shadow-lg shadow-yellow-500/30 transition transform active:scale-95 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-coins"></i>
+                            <span>FLIP COIN</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="mt-8 bg-apex-card rounded-2xl border border-apex-border p-5">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-clock-rotate-left text-cyan-400"></i>
+                    <span>Recent Bets & Activity Audit Log</span>
+                </h3>
+                <button onclick="clearHistory()" class="text-xs text-slate-400 hover:text-white transition">Clear Log</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs sm:text-sm">
+                    <thead>
+                        <tr class="border-b border-apex-border text-slate-400 font-semibold">
+                            <th class="pb-3 px-3">Game / Action</th>
+                            <th class="pb-3 px-3">Amount</th>
+                            <th class="pb-3 px-3">Outcome / Details</th>
+                            <th class="pb-3 px-3">Profit / Update</th>
+                            <th class="pb-3 px-3 text-right">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body" class="divide-y divide-apex-border/60">
+                        <tr>
+                            <td colspan="5" class="py-6 text-center text-slate-500">No activity recorded yet in this session.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <div id="deposit-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-apex-card border border-apex-border rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+                        <i class="fa-solid fa-wallet text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Instant Auto-Deposit Gateway</h3>
+                        <p class="text-xs text-slate-400">Secure automated PKR payment channel</p>
+                    </div>
+                </div>
+                <button onclick="closeDepositModal()" class="w-8 h-8 rounded-lg bg-apex-dark text-slate-400 hover:text-white flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Channel Selector Tabs -->
+            <div class="grid grid-cols-2 gap-3 bg-apex-dark p-1.5 rounded-2xl border border-apex-border">
+                <button onclick="setGatewayChannel('easypaisa')" id="channel-easypaisa" class="py-3 rounded-xl font-bold text-xs bg-cyan-500 text-slate-950 transition flex items-center justify-center space-x-2 shadow">
+                    <span>🟢 Easypaisa</span>
+                </button>
+                <button onclick="setGatewayChannel('jazzcash')" id="channel-jazzcash" class="py-3 rounded-xl font-bold text-xs text-slate-400 hover:text-white transition flex items-center justify-center space-x-2">
+                    <span>🔴 JazzCash</span>
+                </button>
+            </div>
+
+            <!-- Dynamic Gateway Form / Screen -->
+            <div id="gateway-step-1" class="space-y-4">
+                <div class="space-y-2">
+                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Your Mobile Account Number</label>
+                    <input type="text" id="gateway-phone" placeholder="03XXXXXXXXX" value="03114087378" class="w-full bg-apex-dark border border-apex-border rounded-xl px-4 py-3 text-white font-mono text-sm focus:outline-none focus:border-cyan-500">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Select Deposit Amount (PKR)</label>
+                    <div class="grid grid-cols-4 gap-2">
+                        <button onclick="setGatewayAmount(500)" class="py-2.5 rounded-xl bg-apex-dark hover:bg-slate-800 text-cyan-400 font-bold text-xs border border-apex-border">500</button>
+                        <button onclick="setGatewayAmount(1000)" class="py-2.5 rounded-xl bg-apex-dark hover:bg-slate-800 text-cyan-400 font-bold text-xs border border-apex-border">1,000</button>
+                        <button onclick="setGatewayAmount(2000)" class="py-2.5 rounded-xl bg-apex-dark hover:bg-slate-800 text-cyan-400 font-bold text-xs border border-apex-border">2,000</button>
+                        <button onclick="setGatewayAmount(5000)" class="py-2.5 rounded-xl bg-apex-dark hover:bg-slate-800 text-cyan-400 font-bold text-xs border border-apex-border">5,000</button>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <input type="number" id="gateway-custom-amount" value="2000" min="100" class="w-full bg-apex-dark border border-apex-border rounded-xl px-4 py-3 text-white font-bold font-mono focus:outline-none focus:border-cyan-500 text-lg">
+                    <div class="absolute right-4 top-3.5 text-slate-400 text-sm font-bold">PKR</div>
+                </div>
+
+                <button onclick="initiateGatewayPayment()" class="w-full py-4 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-slate-950 font-extrabold text-base shadow-lg shadow-cyan-500/25 transition transform active:scale-95 flex items-center justify-center space-x-2">
+                    <span>PROCEED TO PAYMENT</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- Gateway Step 2: Simulated Timer & Digital Account Screen -->
+            <div id="gateway-step-2" class="space-y-4 hidden text-center py-4">
+                <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 space-y-2">
+                    <div class="text-xs uppercase font-bold text-emerald-400">Payment Session Active</div>
+                    <div class="text-3xl font-black text-white font-mono" id="gateway-timer">06:55</div>
+                    <div class="text-xs text-slate-400">Transfer exact amount to the digital account below</div>
+                </div>
+
+                <div class="bg-apex-dark p-4 rounded-2xl border border-apex-border space-y-2 text-left">
+                    <div class="text-xs text-slate-400 flex justify-between">
+                        <span>Digital Master Account:</span>
+                        <span class="text-cyan-400 font-bold font-mono">101914336</span>
+                    </div>
+                    <div class="text-xs text-slate-400 flex justify-between">
+                        <span>Account Title:</span>
+                        <span class="text-white font-bold">APEXBET GAMING CLOUD</span>
+                    </div>
+                    <div class="text-xs text-slate-400 flex justify-between">
+                        <span>Amount Due:</span>
+                        <span id="gateway-due-amount" class="text-amber-400 font-bold font-mono">Rs. 2,000.00</span>
+                    </div>
+                </div>
+
+                <button onclick="simulateSuccessfulPayment()" class="w-full py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-base shadow-lg shadow-emerald-500/25 transition transform active:scale-95 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>SIMULATE & CONFIRM PAYMENT</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global State & Persistence
+        let balance = parseFloat(localStorage.getItem('apex_casino_balance')) || 10000.00;
+        let gameHistory = JSON.parse(localStorage.getItem('apex_casino_history')) || [];
+        let currentGatewayChannel = 'easypaisa';
+
+        function saveState() {
+            localStorage.setItem('apex_casino_balance', balance.toString());
+            localStorage.setItem('apex_casino_history', JSON.stringify(gameHistory));
+        }
+
+        function updateBalanceUI() {
+            document.getElementById('user-balance').textContent = `Rs. ${balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            saveState();
+        }
+
+        // Tab Navigation Switcher
+        function switchTab(tabId) {
+            const tabs = ['lobby', 'aviator', 'dice', 'slots', 'coinflip'];
+            tabs.forEach(t => {
+                const el = document.getElementById(`view-${t}`);
+                const nav = document.getElementById(`nav-${t}`);
+                if (el) el.classList.add('hidden');
+                if (nav) {
+                    nav.className = "nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center space-x-2 bg-apex-card text-slate-400 hover:text-white hover:bg-slate-800 border border-apex-border transition-all whitespace-nowrap";
+                }
+            });
+
+            const activeEl = document.getElementById(`view-${tabId}`);
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeEl) activeEl.classList.remove('hidden');
+            if (activeNav) {
+                let activeColor = 'bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20';
+                if (tabId === 'dice') activeColor = 'bg-purple-600 text-white shadow-lg shadow-purple-600/20';
+                if (tabId === 'slots') activeColor = 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20';
+                if (tabId === 'coinflip') activeColor = 'bg-yellow-500 text-slate-950 shadow-lg shadow-yellow-500/20';
+                activeNav.className = `nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center space-x-2 ${activeColor} transition-all whitespace-nowrap`;
+            }
+        }
+
+        // Gateway Modal Controls
+        function openDepositModal() {
+            document.getElementById('deposit-modal').classList.remove('hidden');
+            document.getElementById('gateway-step-1').classList.remove('hidden');
+            document.getElementById('gateway-step-2').classList.add('hidden');
+        }
+        function closeDepositModal() {
+            document.getElementById('deposit-modal').classList.add('hidden');
+        }
+        function setGatewayChannel(channel) {
+            currentGatewayChannel = channel;
+            const btnEp = document.getElementById('channel-easypaisa');
+            const btnJc = document.getElementById('channel-jazzcash');
+            if (channel === 'easypaisa') {
+                btnEp.className = "py-3 rounded-xl font-bold text-xs bg-cyan-500 text-slate-950 transition flex items-center justify-center space-x-2 shadow";
+                btnJc.className = "py-3 rounded-xl font-bold text-xs text-slate-400 hover:text-white transition flex items-center justify-center space-x-2";
+            } else {
+                btnJc.className = "py-3 rounded-xl font-bold text-xs bg-red-500 text-white transition flex items-center justify-center space-x-2 shadow";
+                btnEp.className = "py-3 rounded-xl font-bold text-xs text-slate-400 hover:text-white transition flex items-center justify-center space-x-2";
+            }
+        }
+        function setGatewayAmount(amt) {
+            document.getElementById('gateway-custom-amount').value = amt;
+        }
+        function initiateGatewayPayment() {
+            const amt = parseFloat(document.getElementById('gateway-custom-amount').value);
+            if (isNaN(amt) || amt < 100) {
+                alert('Minimum deposit amount is Rs. 100.');
+                return;
+            }
+            document.getElementById('gateway-due-amount').textContent = `Rs. ${amt.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('gateway-step-1').classList.add('hidden');
+            document.getElementById('gateway-step-2').classList.remove('hidden');
+        }
+        function simulateSuccessfulPayment() {
+            const amt = parseFloat(document.getElementById('gateway-custom-amount').value);
+            balance += amt;
+            updateBalanceUI();
+            logBet(`Deposit (${currentGatewayChannel.toUpperCase()})`, amt, `Gateway Verified`, amt);
+            closeDepositModal();
+            alert(`Successfully credited Rs. ${amt.toLocaleString()} via ${currentGatewayChannel.toUpperCase()} auto-gateway!`);
+        }
+
+        // Activity Logging
+        function logBet(game, betAmount, outcomeText, profit) {
+            gameHistory.unshift({
+                game,
+                bet: betAmount,
+                outcome: outcomeText,
+                profit,
+                time: new Date().toLocaleTimeString()
+            });
+            if (gameHistory.length > 25) gameHistory.pop();
+            renderHistory();
+            saveState();
+        }
+
+        function renderHistory() {
+            const tbody = document.getElementById('history-table-body');
+            if (gameHistory.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-500">No activity recorded yet in this session.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = gameHistory.map(h => {
+                const isWin = h.profit >= 0;
+                return `
+                    <tr class="hover:bg-slate-800/40 transition">
+                        <td class="py-3 px-3 font-semibold text-white">${h.game}</td>
+                        <td class="py-3 px-3 text-slate-300 font-mono">Rs. ${h.bet.toLocaleString()}</td>
+                        <td class="py-3 px-3 text-cyan-300 font-mono">${h.outcome}</td>
+                        <td class="py-3 px-3 font-bold font-mono ${isWin ? 'text-emerald-400' : 'text-rose-400'}">${isWin ? '+' : ''}Rs. ${h.profit.toLocaleString()}</td>
+                        <td class="py-3 px-3 text-right text-slate-500 text-xs">${h.time}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function clearHistory() {
+            gameHistory = [];
+            renderHistory();
+            saveState();
+        }
+
+        /* --- STREAMING_CHUNK:Aviator Crash Engine implementation --- */
+        let aviatorState = 'waiting';
+        let aviatorMultiplier = 1.00;
+        let aviatorInterval = null;
+        let aviatorCrashAt = 1.00;
+        let aviatorBetActive = false;
+        let currentAviatorBet = 0;
+
+        function setAviatorBet(amt) { document.getElementById('aviator-bet-input').value = amt; }
+        function setAviatorBetMax() { document.getElementById('aviator-bet-input').value = Math.floor(balance); }
+        function updateAutoCashoutLabel(val) { document.getElementById('auto-cashout-val').textContent = parseFloat(val).toFixed(2) + 'x'; }
+
+        function handleAviatorAction() {
+            const btn = document.getElementById('aviator-action-btn');
+            const betInput = parseFloat(document.getElementById('aviator-bet-input').value);
+
+            if (aviatorState === 'waiting') {
+                if (isNaN(betInput) || betInput <= 0) {
+                    alert('Please enter a valid bet amount.');
+                    return;
+                }
+                if (betInput > balance) {
+                    alert('Insufficient balance!');
+                    return;
+                }
+                balance -= betInput;
+                currentAviatorBet = betInput;
+                updateBalanceUI();
+                
+                aviatorBetActive = true;
+                btn.textContent = 'CASH OUT';
+                btn.className = 'w-full py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-base shadow-lg shadow-emerald-500/25 transition transform active:scale-95 flex items-center justify-center space-x-2';
+                
+                startAviatorFlight();
+            } else if (aviatorState === 'running' && aviatorBetActive) {
+                const winnings = currentAviatorBet * aviatorMultiplier;
+                balance += winnings;
+                updateBalanceUI();
+                
+                document.getElementById('aviator-message').textContent = `Cashed out at ${aviatorMultiplier.toFixed(2)}x! Won Rs. ${winnings.toFixed(2)}`;
+                document.getElementById('aviator-message').className = 'text-center text-xs text-emerald-400 font-bold h-5';
+                
+                logBet('Aviator Crash', currentAviatorBet, `${aviatorMultiplier.toFixed(2)}x Cashout`, winnings - currentAviatorBet);
+                aviatorBetActive = false;
+                
+                btn.textContent = 'BET PLACED (WAITING)';
+                btn.disabled = true;
+                btn.className = 'w-full py-4 rounded-xl bg-slate-800 text-slate-500 font-extrabold text-base cursor-not-allowed';
+            }
+        }
+
+        function startAviatorFlight() {
+            if (aviatorInterval) return;
+            aviatorState = 'running';
+            aviatorMultiplier = 1.00;
+            const rand = Math.random();
+            if (rand < 0.05) aviatorCrashAt = 1.00;
+            else aviatorCrashAt = parseFloat((1.05 + (Math.random() * Math.random() * 16)).toFixed(2));
+
+            const display = document.getElementById('aviator-multiplier-display');
+            const subtext = document.getElementById('aviator-subtext');
+            const badge = document.getElementById('aviator-status-badge');
+            const plane = document.getElementById('aviator-plane-icon');
+
+            badge.textContent = 'Flight in Progress...';
+            badge.className = 'px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-xs font-bold text-emerald-400 animate-pulse';
+            subtext.textContent = 'Plane is ascending';
+            plane.style.opacity = '1';
+            plane.style.transform = 'translate(60px, -20px)';
+
+            aviatorInterval = setInterval(() => {
+                aviatorMultiplier += 0.02;
+                display.textContent = aviatorMultiplier.toFixed(2) + 'x';
+
+                const autoTarget = parseFloat(document.getElementById('aviator-auto-cashout').value);
+                if (aviatorBetActive && aviatorMultiplier >= autoTarget) {
+                    handleAviatorAction();
+                }
+
+                if (aviatorMultiplier >= aviatorCrashAt) {
+                    clearInterval(aviatorInterval);
+                    aviatorInterval = null;
+                    aviatorState = 'crashed';
+
+                    badge.textContent = 'Flew Away!';
+                    badge.className = 'px-3 py-1 rounded-lg bg-rose-500/20 border border-rose-500/30 text-xs font-bold text-rose-400';
+                    display.textContent = aviatorCrashAt.toFixed(2) + 'x CRASHED';
+                    subtext.textContent = 'Better luck next round!';
+                    plane.style.opacity = '0.3';
+                    plane.style.transform = 'translate(220px, -70px)';
+
+                    if (aviatorBetActive) {
+                        logBet('Aviator Crash', currentAviatorBet, `${aviatorCrashAt.toFixed(2)}x (Crashed)`, -currentAviatorBet);
+                        document.getElementById('aviator-message').textContent = `Crashed! Lost Rs. ${currentAviatorBet.toFixed(2)}`;
+                        document.getElementById('aviator-message').className = 'text-center text-xs text-rose-400 font-bold h-5';
+                        aviatorBetActive = false;
+                    }
+
+                    setTimeout(resetAviatorRound, 3000);
+                }
+            }, 60);
+        }
+
+        function resetAviatorRound() {
+            aviatorState = 'waiting';
+            aviatorMultiplier = 1.00;
+            document.getElementById('aviator-multiplier-display').textContent = '1.00x';
+            document.getElementById('aviator-subtext').textContent = 'Place your bet for the next round';
+            document.getElementById('aviator-status-badge').textContent = 'Waiting for takeoff...';
+            document.getElementById('aviator-status-badge').className = 'px-3 py-1 rounded-lg bg-amber-500/20 border border-amber-500/30 text-xs font-bold text-amber-400';
+            
+            const plane = document.getElementById('aviator-plane-icon');
+            plane.style.transition = 'none';
+            plane.style.opacity = '0';
+            plane.style.transform = 'translate(-40px, 0px)';
+            setTimeout(() => { plane.style.transition = 'all 0.075s linear'; }, 50);
+
+            const btn = document.getElementById('aviator-action-btn');
+            btn.disabled = false;
+            btn.textContent = 'PLACE BET';
+            btn.className = 'w-full py-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold text-base shadow-lg shadow-cyan-500/25 transition transform active:scale-95 flex items-center justify-center space-x-2';
+        }
+
+
+        /* --- STREAMING_CHUNK:Dice Total game engine implementation --- */
+        let dicePrediction = 'over';
+        let diceTarget = 10.5;
+
+        function setDiceBet(amt) { document.getElementById('dice-bet-input').value = amt; }
+        function setDiceBetMax() { document.getElementById('dice-bet-input').value = Math.floor(balance); }
+        
+        function setDicePrediction(pred) {
+            dicePrediction = pred;
+            const btnOver = document.getElementById('btn-pred-over');
+            const btnUnder = document.getElementById('btn-pred-under');
+            if (pred === 'over') {
+                btnOver.className = 'py-3 rounded-xl bg-purple-600 text-white font-bold text-sm shadow-lg shadow-purple-600/20 transition border border-purple-500';
+                btnUnder.className = 'py-3 rounded-xl bg-apex-dark text-slate-400 font-bold text-sm hover:bg-slate-800 transition border border-apex-border';
+                document.getElementById('dice-prediction-label').textContent = 'OVER';
+            } else {
+                btnUnder.className = 'py-3 rounded-xl bg-purple-600 text-white font-bold text-sm shadow-lg shadow-purple-600/20 transition border border-purple-500';
+                btnOver.className = 'py-3 rounded-xl bg-apex-dark text-slate-400 font-bold text-sm hover:bg-slate-800 transition border border-apex-border';
+                document.getElementById('dice-prediction-label').textContent = 'UNDER';
+            }
+            updateDiceCalculations();
+        }
+
+        function updateDiceSlider(val) {
+            diceTarget = parseFloat(val);
+            document.getElementById('dice-target-val').textContent = diceTarget;
+            updateDiceCalculations();
+        }
+
+        function updateDiceCalculations() {
+            let winChance = 50;
+            if (dicePrediction === 'over') {
+                winChance = Math.max(5, Math.min(95, ((18 - diceTarget) / 15) * 100));
+            } else {
+                winChance = Math.max(5, Math.min(95, ((diceTarget - 3) / 15) * 100));
+            }
+            const payout = parseFloat((0.98 / (winChance / 100)).toFixed(2));
+            document.getElementById('dice-win-chance').textContent = winChance.toFixed(0) + '%';
+            document.getElementById('dice-payout-mult').textContent = payout + 'x';
+        }
+
+        function rollDiceGame() {
+            const betInput = parseFloat(document.getElementById('dice-bet-input').value);
+            if (isNaN(betInput) || betInput <= 0) {
+                alert('Please enter a valid bet amount.');
+                return;
+            }
+            if (betInput > balance) {
+                alert('Insufficient balance!');
+                return;
+            }
+
+            balance -= betInput;
+            updateBalanceUI();
+
+            const d1 = Math.floor(Math.random() * 6) + 1;
+            const d2 = Math.floor(Math.random() * 6) + 1;
+            const d3 = Math.floor(Math.random() * 6) + 1;
+            const sum = d1 + d2 + d3;
+
+            const diceIcons = ['', 'fa-dice-one', 'fa-dice-two', 'fa-dice-three', 'fa-dice-four', 'fa-dice-five', 'fa-dice-six'];
+            document.getElementById('dice-1').innerHTML = `<i class="fa-solid ${diceIcons[d1]}"></i>`;
+            document.getElementById('dice-2').innerHTML = `<i class="fa-solid ${diceIcons[d2]}"></i>`;
+            document.getElementById('dice-3').innerHTML = `<i class="fa-solid ${diceIcons[d3]}"></i>`;
+            document.getElementById('dice-total-result').textContent = sum;
+
+            let won = false;
+            if (dicePrediction === 'over') {
+                if (sum > diceTarget) won = true;
+            } else {
+                if (sum < diceTarget) won = true;
+            }
+
+            let winChance = dicePrediction === 'over' ? ((18 - diceTarget) / 15) * 100 : ((diceTarget - 3) / 15) * 100;
+            winChance = Math.max(5, Math.min(95, winChance));
+            const payoutMult = 0.98 / (winChance / 100);
+
+            const msg = document.getElementById('dice-message');
+            if (won) {
+                const winnings = betInput * payoutMult;
+                balance += winnings;
+                updateBalanceUI();
+                msg.textContent = `Rolled ${sum}! You Won Rs. ${winnings.toFixed(2)} (${payoutMult.toFixed(2)}x)`;
+                msg.className = 'text-center text-xs text-emerald-400 font-bold h-5';
+                logBet('Dice Total', betInput, `Sum ${sum} (${dicePrediction.toUpperCase()} ${diceTarget})`, winnings - betInput);
+            } else {
+                msg.textContent = `Rolled ${sum}! You Lost Rs. ${betInput.toFixed(2)}`;
+                msg.className = 'text-center text-xs text-rose-400 font-bold h-5';
+                logBet('Dice Total', betInput, `Sum ${sum} (${dicePrediction.toUpperCase()} ${diceTarget})`, -betInput);
+            }
+        }
+
+
+        /* --- STREAMING_CHUNK:Neon Slots game engine implementation --- */
+        const slotSymbols = ['💎', '7️⃣', '⭐', '🔥', '🍒', '🔔'];
+
+        function setSlotBet(amt) { document.getElementById('slot-bet-input').value = amt; }
+        function setSlotBetMax() { document.getElementById('slot-bet-input').value = Math.floor(balance); }
+
+        function spinSlots() {
+            const betInput = parseFloat(document.getElementById('slot-bet-input').value);
+            if (isNaN(betInput) || betInput <= 0) {
+                alert('Please enter a valid bet amount.');
+                return;
+            }
+            if (betInput > balance) {
+                alert('Insufficient balance!');
+                return;
+            }
+
+            balance -= betInput;
+            updateBalanceUI();
+
+            const r1Elem = document.getElementById('reel-1');
+            const r2Elem = document.getElementById('reel-2');
+            const r3Elem = document.getElementById('reel-3');
+            const spinBtn = document.getElementById('spin-btn');
+            const msg = document.getElementById('slot-result-message');
+
+            spinBtn.disabled = true;
+            msg.textContent = 'Spinning reels...';
+            msg.className = 'text-sm font-bold text-amber-400 z-10 h-6 animate-pulse';
+
+            let counter = 0;
+            const spinInterval = setInterval(() => {
+                r1Elem.textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                r2Elem.textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                r3Elem.textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                counter++;
+                if (counter > 15) {
+                    clearInterval(spinInterval);
+                    finalizeSpin(betInput);
+                }
+            }, 80);
+        }
+
+        function finalizeSpin(bet) {
+            const r1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+            const r2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+            const r3 = Math.random() < 0.25 ? r1 : slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+
+            document.getElementById('reel-1').textContent = r1;
+            document.getElementById('reel-2').textContent = r2;
+            document.getElementById('reel-3').textContent = r3;
+
+            const msg = document.getElementById('slot-result-message');
+            const spinBtn = document.getElementById('spin-btn');
+            spinBtn.disabled = false;
+
+            let multiplier = 0;
+            if (r1 === r2 && r2 === r3) {
+                if (r1 === '💎') multiplier = 50;
+                else if (r1 === '7️⃣') multiplier = 25;
+                else if (r1 === '⭐') multiplier = 15;
+                else multiplier = 10;
+            } else if (r1 === r2 || r2 === r3 || r1 === r3) {
+                multiplier = 2;
+            }
+
+            if (multiplier > 0) {
+                const winnings = bet * multiplier;
+                balance += winnings;
+                updateBalanceUI();
+                msg.textContent = `JACKPOT! Matched ${r1} ${r2} ${r3} for ${multiplier}x! Won Rs. ${winnings.toFixed(2)}`;
+                msg.className = 'text-sm font-bold text-emerald-400 z-10 h-6';
+                logBet('Neon Slots', bet, `${r1}${r2}${r3} (${multiplier}x)`, winnings - bet);
+            } else {
+                msg.textContent = `No match (${r1} ${r2} ${r3}). Try again!`;
+                msg.className = 'text-sm font-bold text-rose-400 z-10 h-6';
+                logBet('Neon Slots', bet, `${r1}${r2}${r3} (Miss)`, -bet);
+            }
+        }
+
+
+        /* --- STREAMING_CHUNK:Coin Flip game engine implementation --- */
+        let coinSideChoice = 'heads';
+
+        function setCoinBet(amt) { document.getElementById('coin-bet-input').value = amt; }
+        function setCoinBetMax() { document.getElementById('coin-bet-input').value = Math.floor(balance); }
+
+        function setCoinSide(side) {
+            coinSideChoice = side;
+            const btnHeads = document.getElementById('btn-side-heads');
+            const btnTails = document.getElementById('btn-side-tails');
+            if (side === 'heads') {
+                btnHeads.className = 'py-3 rounded-xl bg-yellow-500 text-slate-950 font-extrabold text-sm shadow-lg shadow-yellow-500/20 transition flex items-center justify-center space-x-2';
+                btnTails.className = 'py-3 rounded-xl bg-apex-dark text-slate-400 font-extrabold text-sm hover:bg-slate-800 transition flex items-center justify-center space-x-2';
+            } else {
+                btnTails.className = 'py-3 rounded-xl bg-yellow-500 text-slate-950 font-extrabold text-sm shadow-lg shadow-yellow-500/20 transition flex items-center justify-center space-x-2';
+                btnHeads.className = 'py-3 rounded-xl bg-apex-dark text-slate-400 font-extrabold text-sm hover:bg-slate-800 transition flex items-center justify-center space-x-2';
+            }
+        }
+
+        function flipCoin() {
+            const betInput = parseFloat(document.getElementById('coin-bet-input').value);
+            if (isNaN(betInput) || betInput <= 0) {
+                alert('Please enter a valid bet amount.');
+                return;
+            }
+            if (betInput > balance) {
+                alert('Insufficient balance!');
+                return;
+            }
+
+            balance -= betInput;
+            updateBalanceUI();
+
+            const coinElem = document.getElementById('coin-element');
+            const resultText = document.getElementById('coin-result-text');
+            resultText.textContent = 'Flipping coin...';
+
+            coinElem.style.transform = 'rotateY(720deg) scale(1.1)';
+            
+            setTimeout(() => {
+                const outcome = Math.random() < 0.5 ? 'heads' : 'tails';
+                coinElem.style.transform = 'rotateY(0deg) scale(1)';
+                coinElem.textContent = outcome === 'heads' ? '👑' : '🪙';
+
+                const won = (outcome === coinSideChoice);
+                if (won) {
+                    const winnings = betInput * 1.98;
+                    balance += winnings;
+                    updateBalanceUI();
+                    resultText.textContent = `It's ${outcome.toUpperCase()}! You Won Rs. ${winnings.toFixed(2)}!`;
+                    resultText.className = 'text-lg font-bold text-emerald-400 mt-6';
+                    logBet('Coin Flip', betInput, `${outcome.toUpperCase()} (Win)`, winnings - betInput);
+                } else {
+                    resultText.textContent = `It's ${outcome.toUpperCase()}! You Lost Rs. ${betInput.toFixed(2)}.`;
+                    resultText.className = 'text-lg font-bold text-rose-400 mt-6';
+                    logBet('Coin Flip', betInput, `${outcome.toUpperCase()} (Loss)`, -betInput);
+                }
+            }, 700);
+        }
+
+        // Initialize state on load
+        updateBalanceUI();
+        renderHistory();
+        updateDiceCalculations();
+    </script>
+</body>
+</html>
